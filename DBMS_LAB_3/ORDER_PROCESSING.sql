@@ -1,14 +1,13 @@
--- i. Create the above tables by properly specifying the primary keys and the foreign keys.
--- ii. Enter at least five tuples for each relation.
+
 CREATE DATABASE ORDER_PROCESSING;
 
 USE ORDER_PROCESSING;
--- SHOW DATABASES;
+
 CREATE TABLE CUSTOMER(CUST_ID INT,CNAME VARCHAR(30),CITY VARCHAR(30),PRIMARY KEY(CUST_ID));
 CREATE TABLE ORDERS(ORDER_ID INT,ORDER_DATE DATE,CUST_ID INT,ORDER_AMOUNT INT,PRIMARY KEY(ORDER_ID),
                            FOREIGN KEY(CUST_ID) REFERENCES CUSTOMER(CUST_ID) ON DELETE CASCADE);
 CREATE TABLE ITEM(ITEM_ID INT,UNITPRICE INT,PRIMARY KEY(ITEM_ID));
--- SHOW TABLES;
+
 CREATE TABLE ORDERITEM(ORDER_ID INT,ITEM_ID INT,QTY INT,
                   FOREIGN KEY(ORDER_ID) REFERENCES ORDERS(ORDER_ID) ON DELETE SET NULL,
                   FOREIGN KEY(ITEM_ID) REFERENCES ITEM(ITEM_ID) ON DELETE SET NULL);
@@ -73,17 +72,25 @@ INSERT INTO SHIPMENT(ORDER_ID,WAREHOUSE_ID,SHIPDATE) VALUES (111,1,'2002-02-10')
 															(119, 7 ,'2005-04-30'),
 															(120, 6 ,'2005-12-21');
                                                             
--- iii) Produce a listing: CUSTNAME, #oforders, AVG_ORDER_AMT, where the middle column is the total
--- numbers of orders by the customer and the last column is the average order amount for that
--- customer.
+/* iii) Produce a listing: CUSTNAME, #oforders, AVG_ORDER_AMT, where the middle column is the total
+ numbers of orders by the customer and the last column is the average order amount for that
+ customer.
+ */
 
 SELECT C.CNAME,COUNT(O.ORDER_ID) AS TOTALORDERS,AVG(O.ORDER_AMOUNT) AS AVG_ORDER_AMT FROM CUSTOMER C,ORDERS O WHERE C.CUST_ID=O.CUST_ID GROUP BY O.CUST_ID;
 
--- iv) List the order# for orders that were shipped from all warehouses that the company has in a
--- specific city.
+/* iv) List the order# for orders that were shipped from all warehouses that the company has in a
+ specific city.
+ */
+ 
+ 
 SELECT S.ORDER_ID FROM SHIPMENT S,WAREHOUSE W WHERE S.WAREHOUSE_ID=W.WAREHOUSE_ID AND W.CITY="BANGALORE";
 
--- v) Demonstrate how you delete item# 10 from the ITEM table and make that field null in the
--- ORDER_ITEM table.
+/* v) Demonstrate how you delete item# 10 from the ITEM table and make that field null in the
+ORDER_ITEM table.
+
+*/
+
+
 DELETE FROM ITEM WHERE ITEM_ID=5002;
 SELECT * FROM ORDERITEM;
